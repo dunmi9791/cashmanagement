@@ -14,13 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from bootstrap import settings
 from django.conf.urls.static import static
 from app import views
+from rest_framework import routers
+from cashmanagement import views
+
+
+router = routers.DefaultRouter()
+router.register(r'accounts', views.AccountView, 'cashmanagement')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('<filename>.html', views.html),
-    path('', views.index),
+    # path('<filename>.html', views.html),
+    # path('', views.index),
+    path('api/', include(router.urls)),
+    path('cashmanagement/', include('cashmanagement.urls'))
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
